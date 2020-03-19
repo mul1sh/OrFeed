@@ -428,9 +428,6 @@ contract orfeed {
         owner = msg.sender;
     }
 
-    function() payable {
-        throw;
-    }
 
     function getTokenToSynthOutputAmount(ERC20 token, bytes32 synth, uint256 inputAmount) returns(uint256) {
         kyber = Kyber(tokenPriceOracleAddress); 
