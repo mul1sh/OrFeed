@@ -1,38 +1,45 @@
-import HDWalletProvider from 'truffle-hdwallet-provider';
-import Web3 from "web3";
-const web3 = new Web3();
+const HDWalletProvider = require("truffle-hdwallet-provider");
 // the mnemonic phrase to an account with some ETH in the respective network
 const mnemonic = process.env.MNEMONIC;
 
 // the infura project id's
 const infuraProjectID = process.env.INFURA_PROJECT_ID;
 
+console.log(mnemonic);
+console.log(infuraProjectID);
 
-export const networks = {
-  mainnet: {
-    provider: function () {
-      return new HDWalletProvider(mnemonic, `https://mainnet.infura.io/${infuraProjectID}`);
+module.exports = {
+  networks : {
+    mainnet: {
+      provider: function () {
+        return new HDWalletProvider(mnemonic, `https://mainnet.infura.io/${infuraProjectID}`);
+      },
+      gasPrice: 10000000000,
+      gas: 4465030,
+      network_id: 1
     },
-    gasPrice: web3.utils.toWei('10', 'gwei'),
-    network_id: 1
+    kovan: {
+      provider: function () {
+        return new HDWalletProvider(mnemonic, `https://kovan.infura.io/${infuraProjectID}`);
+      },
+      gasPrice: 10000000000,
+      gas: 4465030,
+      network_id: 42
+    },
+    rinkeby: {
+      provider: function () {
+        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${infuraProjectID}`);
+      },
+      gasPrice: 10000000000,
+      gas: 4465030,
+      network_id: 4
+    }
+
   },
-  kovan: {
-    provider: function () {
-      return new HDWalletProvider(mnemonic, `https://kovan.infura.io/${infuraProjectID}`);
-    },
-    gasPrice: web3.utils.toWei('10', 'gwei'),
-    network_id: 42
-  },
-  rinkeby: {
-    provider: function () {
-      return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${infuraProjectID}`);
-    },
-    gasPrice: web3.utils.toWei('10', 'gwei'),
-    network_id: 4
+  compilers : {
+    solc: {
+      version: '0.4.26'
+    }
   }
-};
-export const compilers = {
-  solc: {
-    version: '0.4.26'
-  }
+
 };

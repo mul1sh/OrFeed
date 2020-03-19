@@ -1,5 +1,3 @@
-pragma solidity ^0.4.26;
-
 interface IKyberNetworkProxy {
     function maxGasPrice() external view returns(uint);
 

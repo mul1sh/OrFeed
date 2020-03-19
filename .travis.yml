@@ -1,35 +1,20 @@
-language: node_js
+dist: bionic
 
-sudo: required
+language: python
 
-node_js:
-  - "8.11.3"
-
-python:
-  - "3.6"
-
-env:
-  - CXX=g++-4.8
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - build-essential
-      - g++-4.8
+python: 3.7.6
 
 before_install:
-  - export CXX="g++-4.8"
-  - npm install -g npm@latest
-  - npm install -g ganache-cli truffle
-  - pip install --user mythx-cli
+  - sudo add-apt-repository ppa:ethereum/ethereum --y
+  - sudo apt-get update 
+  - sudo apt-get install solc
+  - cd contracts/
 
-install:
-  - npm install 
+install: 
+  - pip install mythx-cli
 
 script:
-  - ganache-cli &
-  - truffle test --kovan
-  - cd contracts &
-  - mythx analyze 
+  - mythx analyze --solc-version 0.6.4 orfeed.sol
+
+notifications:
+  email: false
