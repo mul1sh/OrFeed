@@ -1,9 +1,4 @@
-//MainNet Deployment: 0x8316b082621cfedab95bf4a44a1d4b64a6ffc336
-
-//orfeed.org oracle aggregator
-
-
-pragma experimental ABIEncoderV2;
+pragma solidity ^0.4.26;
 
 interface IKyberNetworkProxy {
     function maxGasPrice() external view returns(uint);
@@ -46,10 +41,6 @@ interface premiumSubInterface {
 
 }
 
-interface arbInterface {
-    function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) external payable returns(bool);
-    function extraFunction(string param1, string param2, string param3, string param4) external  returns(string);
-}
 
 interface priceAsyncInterface {
     function requestPriceResult(string fromSymbol, string toSymbol, string venue, uint256 amount) external returns(string);
@@ -328,9 +319,6 @@ contract orfeed {
     //events ( async, no price oracle)
     address eventsProxyAsyncContractAddress;
     
-    //arb contract
-    address arbContractAddress;
-    
 
     premiumSubInterface psi;
     IKyberNetworkProxy ki;
@@ -354,46 +342,28 @@ contract orfeed {
 
     //free ERC20 rates. Can be changed/updated by ownerDAO
     constructor() public payable {
-        freeRateTokenSymbols['SAI'] = 0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359;
-        freeRateTokenSymbols['DAI'] = 0x6b175474e89094c44da98b954eedeac495271d0f;
-        freeRateTokenSymbols['USDC'] = 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48;
-        freeRateTokenSymbols['MKR'] = 0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2;
-        freeRateTokenSymbols['LINK'] = 0x514910771af9ca656af840dff83e8264ecf986ca;
-        freeRateTokenSymbols['BAT'] = 0x0d8775f648430679a709e98d2b0cb6250d2887ef;
-        freeRateTokenSymbols['WBTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        freeRateTokenSymbols['BTC'] = 0x2260fac5e5542a773aa44fbcfedf7c193bc2c599;
-        freeRateTokenSymbols['OMG'] = 0xd26114cd6EE289AccF82350c8d8487fedB8A0C07;
-        freeRateTokenSymbols['ZRX'] = 0xe41d2489571d322189246dafa5ebde1f4699f498;
-        freeRateTokenSymbols['TUSD'] = 0x0000000000085d4780B73119b644AE5ecd22b376;
+    
+        freeRateTokenSymbols['SAI'] = 0x2303039ee502ad4d663b83cb4ce1102ff5846457; 
+        freeRateTokenSymbols['DAI'] = 0xc4375b7de8af5a38a93548eb8453a498222c4ff2; 
+        freeRateTokenSymbols['USDC'] = 0x6c27debde8c5fe159c5b6b47f5fa56b7f532247a; 
+        freeRateTokenSymbols['MKR'] = 0xac94ea989f6955c67200dd67f0101e1865a560ea; 
+        freeRateTokenSymbols['LINK'] = 0xad5ce863ae3e4e9394ab43d4ba0d80f419f61789; 
+        freeRateTokenSymbols['BAT'] = 0xec88a5050c63bb9e073afc78b3b9378d0eb53257; 
+        freeRateTokenSymbols['WBTC'] = 0xa1d3eecb76285b4435550e4d963b8042a8bffbf0;
+        freeRateTokenSymbols['BTC'] = 0xa1d3eecb76285b4435550e4d963b8042a8bffbf0;
+        freeRateTokenSymbols['OMG'] = 0xdff868181120da44e8250855a21cdbed2ed039ab;
+        freeRateTokenSymbols['ZRX'] = 0x6ff6c0ff1d68b964901f986d4c9fa3ac68346570;
+        freeRateTokenSymbols['TUSD'] = 0xb41f85973606ceb0ac33316f04311348b6f2f288;
         freeRateTokenSymbols['ETH'] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-        freeRateTokenSymbols['WETH'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-        freeRateTokenSymbols['ETH2'] = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
-        freeRateTokenSymbols['SNX'] = 0xc011a72400e58ecd99ee497cf89e3775d4bd732f;
-        freeRateTokenSymbols['CSAI'] = 0xf5dce57282a584d2746faf1593d3121fcac444dc;
-        freeRateTokenSymbols['CUSDC'] = 0x39aa39c021dfbae8fac545936693ac917d5e7563;
-        freeRateTokenSymbols['KNC'] = 0xdd974d5c2e2928dea5f71b9825b8b646686bd200;
-        freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
-        freeRateTokenSymbols['GST1'] = 0x88d60255F917e3eb94eaE199d827DAd837fac4cB;
-        freeRateTokenSymbols['GST2'] = 0x0000000000b3F879cb30FE243b4Dfee438691c04;
+        freeRateTokenSymbols['WETH'] = 0xd0a1e359811322d97991e03f863a0c30c2cf029c;
+        freeRateTokenSymbols['SNX'] = 0x0189ce2e2a69423cc736eee1b1bb51cd846d19d7;
+        freeRateTokenSymbols['CSAI'] = 0x63c344bf8651222346dd870be254d4347c9359f7;
+        freeRateTokenSymbols['CUSDC'] = 0x4de5b931c9d4eeb5935711c02292d3a54f146aff;
+        freeRateTokenSymbols['KNC'] = 0xb2f3dd487708ca7794f633d9df57fdb9347a7aff;
+        freeRateTokenSymbols['USDT'] = 0x9e9080008e946bfaad328f5adc18b73c91845a5d;
+        freeRateTokenSymbols['GST1'] = 0x88d60255f917e3eb94eae199d827dad837fac4cb;
+        freeRateTokenSymbols['GST2'] = 0x0000000000170ccc93903185be5a2094c870df62;
         
-        //commented list of tokens added post deployment
-
-        //freeRateTokenSymbols['LEND'] = 0x80fb784b7ed66730e8b1dbd9820afd29931aab03;
-        //freeRateTokenSymbols['ADAI'] = 0xfc1e690f61efd961294b3e1ce3313fbd8aa4f85d;
-        //freeRateTokenSymbols['REP'] =  0x1985365e9f78359a9B6AD760e32412f4a445E862;
-        //freeRateTokenSymbols['ZIL'] =  0x05f4a42e251f2d52b8ed15e9fedaacfcef1fad27;
-        //freeRateTokenSymbols['AST'] =  0x27054b13b1b798b345b591a4d22e6562d47ea75a;
-        //freeRateTokenSymbols['HOT'] =  0x6c6ee5e31d828de241282b9606c8e98ea48526e2;
-        //freeRateTokenSymbols['KCS'] =  0x039b5649a59967e3e936d7471f9c3700100ee1ab;
-        //freeRateTokenSymbols['MXM'] =  0x8e766f57f7d16ca50b4a0b90b88f6468a09b0439;
-        //freeRateTokenSymbols['CRO'] =  0xa0b73e1ff0b80914ab6fe0444e65848c4c34450b;
-        //freeRateTokenSymbols['BNB'] =  0xB8c77482e45F1F44dE1745F52C74426C631bDD52;
-        //freeRateTokenSymbols['BNT'] =  0x1f573d6fb3f13d689ff844b4ce37794d79a7ff1c;
-        //freeRateTokenSymbols['HT'] =  0x6f259637dcd74c767781e37bc6133cd6a68aa161;
-        //freeRateTokenSymbols['PAX'] =  0x8e870d67f660d95d5be530380d0ec0bd388289e1;
-        //freeRateTokenSymbols['CDAI'] =  0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643;
-        //freeRateTokenSymbols['CSAI'] =  0xf5dce57282a584d2746faf1593d3121fcac444dc;
-        //freeRateTokenSymbols['USDT'] = 0xdac17f958d2ee523a2206206994597c13d831ec7;
         
         
   
@@ -401,21 +371,17 @@ contract orfeed {
         
 
         //free forex rates. Can be changed/updated by ownerDAO        
-        freeRateForexSymbols['USD'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
-        freeRateForexSymbols['EUR'] = 0xd71ecff9342a5ced620049e616c5035f1db98620;
-        freeRateForexSymbols['CHF'] = 0x0f83287ff768d1c1e17a42f44d644d7f22e8ee1d;
-        freeRateForexSymbols['JPY'] = 0xf6b1c627e95bfc3c1b4c9b825a032ff0fbf3e07d;
-        freeRateForexSymbols['GBP'] = 0x97fe22e7341a0cd8db6f6c021a24dc8f4dad855f;
-        freeRateForexSymbols['sETH'] = 0x57ab1e02fee23774580c119740129eac7081e9d3;
-        
+        freeRateForexSymbols['USD'] = 0x559e848a1b6a7afc69ee27f8d20280a42628b2cf;
+        freeRateForexSymbols['EUR'] = 0xb03dfc4b9c9756b6d4fbc12dade7732149fcf00d;
+        freeRateForexSymbols['CHF'] = 0x1e57befe49b5f02f91be0d3bf4407d70bd2e0da4;
+        freeRateForexSymbols['JPY'] = 0x112d5fa64e4902b6ff1a35495a0f878c210a5601;
+        freeRateForexSymbols['GBP'] = 0xa10d76871fe5fe55db1502a2003c28092dfcb310;
 
         freeRateForexBytes['USD'] = 0x7355534400000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['EUR'] = 0x7345555200000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['CHF'] = 0x7343484600000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['JPY'] = 0x734a505900000000000000000000000000000000000000000000000000000000;
         freeRateForexBytes['GBP'] = 0x7347425000000000000000000000000000000000000000000000000000000000;
-        freeRateForexBytes['sETH'] = 0x7345544800000000000000000000000000000000000000000000000000000000;
-
 
         //when returning rates they will be first divided by and then multiplied by these rates
         rateDivide1 = 100;
@@ -432,7 +398,7 @@ contract orfeed {
 
         //erc20 price oracle address. Can be changed by DAO
         tokenPriceOracleAddress = 0xFd9304Db24009694c680885e6aa0166C639727D6;
-        synthetixExchangeAddress = 0xE95Ef4e7a04d2fB05cb625c62CA58da10112c605;
+        synthetixExchangeAddress = 0x99a46c42689720d9118FF7aF7ce80C2a92fC4f97;
 
         tokenPriceOracleAddress2 = 0xe9Cf7887b93150D4F2Da7dFc6D502B216438F244;
 
@@ -440,10 +406,8 @@ contract orfeed {
         forexPriceOracleAddress = 0xE86C848De6e4457720A1eb7f37B519010CD26d35;
 
         //premium price oracle address. Can be changed by DAO
-        premiumSubPriceOracleAddress = 0xbf2e5dc9b5c25911c68edcebd57438da1abd7ed6;
+        premiumSubPriceOracleAddress = 0x1603557c3f7197df2ecded659ad04fa72b1e1114;
         
-        //arb proxy contract address. Can be cahnged... will be changed by DAO
-        arbContractAddress = 0x0;
         
 
         ethTokenAddress = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
@@ -475,15 +439,15 @@ contract orfeed {
         uint256 ethAmount = kyber.getOutputAmount(token, ethToken, inputAmount);
         uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 sethAmount = uniswap.getEthToTokenInputPrice(ethAmount);
-        se = SynthetixExchange(synthetixExchangeAddress);
-        uint256 outputAmount = se.effectiveValue(freeRateForexBytes['sETH'], sethAmount, synth);
+        synthetix = Synthetix(forexPriceOracleAddress);
+        uint256 outputAmount = synthetix.getOutputAmount('sETH', synth, sethAmount);
         return outputAmount;
     }
 
     function getSynthToTokenOutputAmount(bytes32 synth, ERC20 token, uint256 inputAmount) returns(uint256) {
          kyber = Kyber(tokenPriceOracleAddress); 
-        se = SynthetixExchange(synthetixExchangeAddress);
-        uint256 sethAmount = se.effectiveValue(synth, inputAmount, freeRateForexBytes['sETH']);
+        synthetix = Synthetix(forexPriceOracleAddress);
+        uint256 sethAmount = synthetix.getOutputAmount(synth, 'sETH', inputAmount);
         uniswap = Uniswap(tokenPriceOracleAddress2);
         uint256 ethAmount = uniswap.getTokenToEthInputPrice(sethAmount);
         uint256 outputAmount = kyber.getOutputAmount(ethToken, token, ethAmount);
@@ -546,13 +510,6 @@ contract orfeed {
     }
 
 
-    function updateSynthAddress(address newOracle) onlyOwner external returns(bool) {
-        synthetixExchangeAddress = newOracle;
-        return true;
-    }
-
-
-
     //this will go to a DAO
     function updatePremiumSubOracleAddress(address newOracle) onlyOwner external returns(bool) {
         premiumSubPriceOracleAddress = newOracle;
@@ -572,12 +529,6 @@ contract orfeed {
     
      function updateSyncEventsAddress (address newOracle) onlyOwner external returns(bool) {
         eventsProxySyncContractAddress = newOracle;
-        return true;
-    }
-    
-    
-    function updateArbContractAddress (address newAddress) onlyOwner external returns(bool) {
-        arbContractAddress = newAddress;
         return true;
     }
     
@@ -657,8 +608,6 @@ contract orfeed {
     }
     
     
-   
-    
     function requestAsyncEvent(string eventName, string source)  external returns(string) {
     
         eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
@@ -674,43 +623,9 @@ contract orfeed {
     }
     
 
-
-    function arb(address fundsReturnToAddress, address liquidityProviderContractAddress, string[] tokens,  uint256 amount, string[] exchanges) payable returns (bool){
-       
-        arbInterface arbContract = arbInterface(arbContractAddress);
-       address tokenAddress = getTokenAddress(tokens[0]);
-       if(tokenAddress != getTokenAddress("ETH")){
-           require(ERC20(tokenAddress).transferFrom(msg.sender, arbContractAddress, amount));
-       }
-       
-        bool arbResp = arbContract.arb.value(msg.value)(fundsReturnToAddress, liquidityProviderContractAddress, tokens, amount, exchanges);
-        if(arbResp != true){
-            throw;
-        }
-        return arbResp;
-    }
-    
-    function callExtraFunction(string param1, string param2, string param3, string param4) returns (string){
-         arbInterface arbContract = arbInterface(arbContractAddress);
-         string memory extraResp = arbContract.extraFunction(param1, param2, param3, param4);
-         return extraResp;
-    }
-    
-
-    
-
-
-    function getTokenAddress(string symbol) constant  returns(address){
-        if(freeRateTokenSymbols[symbol] == 0x0){
-             address tokenAddress = address(stringToBytes32(symbol));
-             return tokenAddress;
-        }
-       
+    function getTokenAddress(string symbol) constant external returns(address){
         return freeRateTokenSymbols[symbol];
     }
-    
-    
-
 
     function getForexAddress(string symbol) constant external returns(address){
          return freeRateForexSymbols[symbol];
@@ -771,27 +686,18 @@ contract orfeed {
            
              kyber = Kyber(tokenPriceOracleAddress); 
             uint256 toRate = kyber.getOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), ERC20(freeRateTokenSymbols[toSymb]), amount);
-            return toRate;
            
         } 
 
         //token to forex
         else if (freeRateTokenSymbols[fromSymb] != 0x0 && freeRateTokenSymbols[toSymb] == 0x0) {
            
-            if(equal(fromSymb,"ETH")){
-                fromSymb = "ETH2";
-            }
-
             uint256 toRate2 = getTokenToSynthOutputAmount(ERC20(freeRateTokenSymbols[fromSymb]), freeRateForexBytes[toSymb], amount);
             return toRate2.mul(rateMultiply2).div(rateDivide2);
         } 
 
         //forex to token
         else if (freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] != 0x0) {
-            
-            if(equal(toSymb,"ETH")){
-                toSymb = "ETH2";
-            }
             
             uint256 toRate3 = getSynthToTokenOutputAmount(freeRateForexBytes[fromSymb], ERC20(freeRateTokenSymbols[toSymb]), amount);
             return toRate3.mul(rateMultiply3).div(rateDivide3);
@@ -801,8 +707,7 @@ contract orfeed {
         //forex to forex
 
         else if (freeRateTokenSymbols[fromSymb] == 0x0 && freeRateTokenSymbols[toSymb] == 0x0) {
-
-            se = SynthetixExchange(synthetixExchangeAddress);
+            
             uint256 toRate4 = se.effectiveValue(freeRateForexBytes[fromSymb], amount, freeRateForexBytes[toSymb]);
             return toRate4.mul(rateMultiply4).div(rateDivide4);
         } 
@@ -811,70 +716,6 @@ contract orfeed {
             return 0;
         }
     }
-    
-    function stringToBytes32(string memory source) returns (bytes32 result) {
-        bytes memory tempEmptyStringTest = bytes(source);
-        if (tempEmptyStringTest.length == 0) {
-            return 0x0;
-        }
-    
-        assembly {
-            result := mload(add(source, 32))
-        }
-    }
-
-    function compare(string _a, string _b) returns (int) {
-        bytes memory a = bytes(_a);
-        bytes memory b = bytes(_b);
-        uint minLength = a.length;
-        if (b.length < minLength) minLength = b.length;
-        //@todo unroll the loop into increments of 32 and do full 32 byte comparisons
-        for (uint i = 0; i < minLength; i ++)
-            if (a[i] < b[i])
-                return -1;
-            else if (a[i] > b[i])
-                return 1;
-        if (a.length < b.length)
-            return -1;
-        else if (a.length > b.length)
-            return 1;
-        else
-            return 0;
-    }
-    
-    function equal(string _a, string _b) returns (bool) {
-        return compare(_a, _b) == 0;
-    }
-    
-    function indexOf(string _haystack, string _needle) returns (int)
-    {
-        bytes memory h = bytes(_haystack);
-        bytes memory n = bytes(_needle);
-        if(h.length < 1 || n.length < 1 || (n.length > h.length)) 
-            return -1;
-        else if(h.length > (2**128 -1)) // since we have to be able to return -1 (if the char isn't found or input error), this function must return an "int" type with a max length of (2^128 - 1)
-            return -1;                                  
-        else
-        {
-            uint subindex = 0;
-            for (uint i = 0; i < h.length; i ++)
-            {
-                if (h[i] == n[0]) // found the first char of b
-                {
-                    subindex = 1;
-                    while(subindex < n.length && (i + subindex) < h.length && h[i + subindex] == n[subindex]) // search until the chars don't match or until we reach the end of a or b
-                    {
-                        subindex++;
-                    }   
-                    if(subindex == n.length)
-                        return int(i);
-                }
-            }
-            return -1;
-        }   
-    }
-
-    
     
     //end contract
 }

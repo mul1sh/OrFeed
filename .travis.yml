@@ -4,8 +4,9 @@ sudo: required
 
 node_js:
   - "8.11.3"
+
 python:
-  - "2.7"
+  - "3.6"
 
 env:
   - CXX=g++-4.8
@@ -30,3 +31,5 @@ install:
 script:
   - ganache-cli &
   - truffle test --kovan
+  - cd contracts &
+  - mythx analyze 

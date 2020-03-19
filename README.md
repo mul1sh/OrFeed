@@ -1,6 +1,6 @@
 # OrFeed
 
-[![Discord](https://img.shields.io/discord/671195829524103199)](https://discord.gg/byCPVsY)
+[![Build Status](https://travis-ci.com/mul1sh/OrFeedSmartContracts.svg?branch=master)](https://travis-ci.com/mul1sh/OrFeedSmartContracts)
 
 ## Decentralized Price Feed and Website Data Provider for Smart Contracts That Need Finance, Sports and Other Miscellaneous Information That Resides On- and/or Off-Chain.
 
@@ -112,125 +112,6 @@ string memory info = orfeed.getEventResult("skip", "satoshi-first-block");
 Returns: The Times 03/Jan/2009 Chancellor on brink of second bailout for banks
 
 
-
-## RESTful API
-
-You can access the getExchangeRate functionality via RESTful API calls. e.g.
-```javascript
-https://api.orfeed.org/getExchangeRate?fromSymbol=JPY&toSymbol=USD&venue=DEFAULT&amount=10000000000000000
-```
-
-More of OrFeed's smart contract functionality will be added to RESTful calls soon. You can find the source code for the Node.js API app in /nodeJSAppExamples/orfeedapi
-
-
-
-## Providing Data As An Oracle Provider
-
-You can register a provider name and connect it to your custom oracle contract (DNS-style) via the OrFeed Oracle Registry: [here](https://etherscan.io/dapp/0x74b5ce2330389391cc61bf2287bdc9ac73757891) by calling the registerOracle function.
-Additionally, you can tranfer the oracle name, provide contact details in case you are considering selling it, and discover other oracle providers via the smart contract.
-An example of an oracle smart contract that will be compatible with the OrFeed proxy contract is available in /contracts/examples/ProvideDataExamples/userGeneratedOracleExample.sol (very simple example that either returns 500 or 2)
-Once you deploy your contract and register it to the registry (paying a small amount of ETH to prevent spamming of names), you can check/verify your registration by calling the getOracleAddress function.
-
-As more reputable, as well as trustless, oracle smart contracts register within the OrFeed registry, we will update a new list as a reference.
-
-
-## Source and Asset Examples (Currently on MainNet)
-
-
-| Asset       | Example Provider (Venue)           | Type  |
-| ------------- |:-------------:| -----:|
-| ETH      | DEFAULT | Cryptocurrency |
-| BTC      | DEFAULT | Cryptocurrency |
-| DAI      | BUY-KYBER-EXCHANGE      |   Token |
-| USDC | SELL-UNISWAP-EXCHANGE    |    Token |
-| MKR      | BANCOR | Token |
-| KNC      | DEFAULT      |   Token |
-| ZRX | DEFAULT    |    Token |
-| TUSD | DEFAULT    |    Token |
-| SNX | DEFAULT    |    Token |
-| CUSDC | DEFAULT    |    Token |
-| BAT | DEFAULT    |    Token |
-| OMG | DEFAULT    |    Token |
-| SAI | DEFAULT    |    Token |
-| JPY | DEFAULT    |    Forex |
-| EUR | DEFAULT    |    Forex |
-| CHF | DEFAULT    |    Forex |
-| USD | DEFAULT    |    Forex |
-| GBP | DEFAULT    |    Forex |
-| AAPL | PROVIDER1    |    Equity |
-| MSFT | PROVIDER1    |    Equity |
-| GOOGL | PROVIDER1    |    Equity |
-| NFLX | PROVIDER1    |    Equity |
-| BRK.A | PROVIDER1    |    Equity |
-| FB | PROVIDER1    |    Equity |
-| BABA | PROVIDER1    |    Equity |
-| V | PROVIDER1    |    Equity |
-| JNJ | PROVIDER1    |    Equity |
-| TSLA | PROVIDER1    |    Equity |
-| JPM | PROVIDER1    |    Equity |
-| DIS | PROVIDER1    |    Equity |
-| SPX | PROVIDER1    |    ETF |
-| VOO | PROVIDER1    |    ETF |
-| QQQ | PROVIDER1    |    ETF |
-| GLD | PROVIDER1    |    ETF |
-| VXX | PROVIDER1    |    ETF |
-
-
-
-The top 20 ERC-20 tokens are available.
-
-contracts/pegTokenExample.sol contains a template code and live contract reference for a token using OrFeed data that is pegged to the value of an off-chain asset (Alibaba Stock in the example). We are looking forward to less primitive examples that leverage DAOs, advanced collateralization techniques, etc. Also, contracts/levFacility.sol is in very early stages and is the begining of creating a token that has a built-in leveraged short/long credit facility for margin trading of futures settled by OrFeed data (very early).
-
-Note: "PROVIDER1" was the first external financial data provider for the OrFeed oracle system, and you can check the updates from this address on mainnet: 0xc807bef0cc81911a34b1a9a0dad29fd78fa7e703. The code example to run your own external data oracle is located in /contracts/examples/ProvideDataExamples/stockETFPriceContract.sol (smart contract) and /contracts/examples/oraclenodeExampleApp (for node application to interface with that smart contract)
-
-
-
-## DeFi Interest Rate Data/Calculator
-
-Coming soon.
-
-
-
-## Examples
-
-The contracts/examples folder contains contracts for both writing data as an oracle provider and for consuming data as an oracle consumer.
-
-The /nodeJSAppExamples folder contains Node.js apps that interface with smart contracts that either read or write oracle data
-
-
-
-## Getting Data From [Chainlink](https://chain.link/) via OrFeed
-
-You can retrieve data from a website (off-chain) asynchronously via the Chainlink integration. To use this feature, please follow these steps:
-
-1. Make sure you have [LINK](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca) coins in your wallet that you are making the request from. If you don't have LINK, you can visit Uniswap.io or Kyberswap to convert Ether to LINK. You will need .1 LINK per request. 
-
-2. Approve the OrFeed Chainlink proxy contract to use your LINK coins to pay the Chainlink fees. Visit [https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract](https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca#writeContract) and use the "Approve" function. In the "_spender" field, paste this address: 0xa0f806d435f6acaf57c60d034e57666d21294c47. In the "_amount" field, input: 100000000000000000000000000. Additionally, at the top of the page, right above the approve function, make sure to click Connect to Web3.
-
-Optionally, for subsidized LINK fees, you can use PRFT token to pay for fees (.01 PRFT per request). Visit [https://etherscan.io/token/0xc5cea8292e514405967d958c2325106f2f48da77#writeContract](https://etherscan.io/token/0xc5cea8292e514405967d958c2325106f2f48da77#writeContract) and use the "Approve" function in the same way you would do for LINK described above.
-
-
-
-
-Now you are ready!
-
-```javascript
-string status = orfeed.requestAsyncEvent("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK");
-```
-
-After 1 to 3 blocks, Chainlink will send the website data to OrFeed and you can access that data without making a transaction (synchronously). Additionally, you can access data from websites that others have already paid for by inputting their the URL.
-
-```javascript
-string result = orfeed.getAsyncEventResult("https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD", "CHAINLINK", "");
-```
-
-Similar integrations with Augur, Provable and Band Protocol are coming soon.
-
-
-Once your transaction has been confirmed on the blockchain, Chainlink then waits 1-3 blocks and sends the response from their smart contract.
-
-
-
 ## Testing
 
 To test that the contracts are working well in the respective networks, please do the following
@@ -252,13 +133,6 @@ Common default data providers when venue parameters are left blank are Kyber, Un
 Future private/premium data may be provided as follows (though we are to suggestions, and welcome you to join the OrFeed DAO where we will be voting on future governance decisions):
 
 ![How it all fits together](https://www.orfeed.org/images/diagram.png)
-
-### Demos on Testnets
-
-These can often fall out-of-date as we take a MainNet-first approach as most of the OrFeed functionality does not require gas, as OrFeed serves as a proxy to many other contracts.
-
-**Kovan**: [0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d](https://kovan.etherscan.io/address/0x31a29958301c407d4b4bf0d53dac1f2d154d9d8d)  
-**Rinkeby**: [0x97875355ef55ae35613029df8b1c8cf8f89c9066](https://rinkeby.etherscan.io/address/0x97875355ef55ae35613029df8b1c8cf8f89c9066) 
 
 
 ### Works Provided As Inspiration Of Thought Through Development:

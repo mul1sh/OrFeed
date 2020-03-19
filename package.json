@@ -4,7 +4,6 @@
   "description": "An ethereum oracle service",
   "main": "truffle-config.js",
   "directories": {
-    "example": "examples",
     "test": "tests"
   },
   "devDependencies": {
@@ -12,7 +11,7 @@
     "web3": "^1.2.4"
   },
   "scripts": {
-    "test": "truffle test"
+    "test": "truffle test --kovan"
   },
   "repository": {
     "type": "git",
