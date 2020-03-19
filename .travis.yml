@@ -4,6 +4,8 @@ sudo: required
 
 node_js:
   - "8.11.3"
+python:
+  - "2.7"
 
 env:
   - CXX=g++-4.8
@@ -20,10 +22,11 @@ before_install:
   - export CXX="g++-4.8"
   - npm install -g npm@latest
   - npm install -g ganache-cli truffle
+  - pip install --user mythx-cli
 
 install:
   - npm install 
 
 script:
   - ganache-cli &
-  - truffle test --mainnet
+  - truffle test --kovan

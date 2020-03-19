@@ -345,6 +345,7 @@ contract orfeed {
 
     //free ERC20 rates. Can be changed/updated by ownerDAO
     constructor() public payable {
+    
         freeRateTokenSymbols['SAI'] = 0x2303039ee502ad4d663b83cb4ce1102ff5846457; 
         freeRateTokenSymbols['DAI'] = 0xc4375b7de8af5a38a93548eb8453a498222c4ff2; 
         freeRateTokenSymbols['USDC'] = 0x6c27debde8c5fe159c5b6b47f5fa56b7f532247a; 
