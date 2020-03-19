@@ -562,7 +562,7 @@ contract orfeed {
    
 
     //returns zero if the rate cannot be found
-    function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount) constant external returns(uint256) {
+    function getExchangeRate(string fromSymbol, string toSymbol, string venue, uint256 amount) external view returns(uint256) {
         bool isFreeFrom = isFree(fromSymbol);
         bool isFreeTo = isFree(toSymbol);
         bool isFreeVenue = isFreeVenueCheck(venue);
@@ -587,7 +587,7 @@ contract orfeed {
         return resString;
     }
     
-     function requestAsyncExchangeRateResult(string fromSymbol, string toSymbol, string venue, uint256 amount, string referenceId) constant  external returns(uint256) {
+     function requestAsyncExchangeRateResult(string fromSymbol, string toSymbol, string venue, uint256 amount, string referenceId) external view returns(uint256) {
     
         priceAsyncInterface api = priceAsyncInterface(asyncProxyContractAddress);
         uint256 resPrice = api.getRequestedPriceResult(fromSymbol, toSymbol, venue, amount,referenceId);
@@ -595,7 +595,7 @@ contract orfeed {
     }
     
     
-    function getEventResult(string eventName, string source)  constant external returns(string) {
+    function getEventResult(string eventName, string source) external view returns(string) {
     
         eventsSyncInterface epiSync = eventsSyncInterface(eventsProxySyncContractAddress);
         string memory resString = epiSync.getEventResult(eventName, source);
@@ -610,7 +610,7 @@ contract orfeed {
         return resString;
     }
     
-    function getAsyncEventResult(string eventName, string source, string referenceId) constant  external returns(string) {
+    function getAsyncEventResult(string eventName, string source, string referenceId) external view returns(string) {
     
         eventsAsyncInterface epi = eventsAsyncInterface(eventsProxyAsyncContractAddress);
         string memory resString = epi.getRequestedEventResult(eventName, source, referenceId);
@@ -618,19 +618,19 @@ contract orfeed {
     }
     
 
-    function getTokenAddress(string symbol) constant external returns(address){
+    function getTokenAddress(string symbol) external view returns(address){
         return freeRateTokenSymbols[symbol];
     }
 
-    function getForexAddress(string symbol) constant external returns(address){
+    function getForexAddress(string symbol) external view returns(address){
          return freeRateForexSymbols[symbol];
     }
 
-    function getSynthBytes32(string symbol)  constant external returns(bytes32){
+    function getSynthBytes32(string symbol) external view returns(bytes32){
         return freeRateForexBytes[symbol];
     }
 
-    function getTokenDecimalCount(address tokenAddress) constant external returns(uint256){
+    function getTokenDecimalCount(address tokenAddress) external view returns(uint256){
         ERC20 thisToken = ERC20(tokenAddress);
         uint256 decimalCount = thisToken.decimals();
     }
